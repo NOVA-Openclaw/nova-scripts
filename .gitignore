@@ -1,0 +1,22 @@
+# Credentials and secrets
+*.env
+.env*
+secrets/
+credentials/
+*_token*
+*_secret*
+*.pem
+*.key
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*~
