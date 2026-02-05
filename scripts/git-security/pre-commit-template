@@ -1,0 +1,83 @@
+#!/bin/bash
+# Universal pre-commit hook: Scan for potential secrets before committing
+# Install: cp this file to .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# Or use: ~/clawd/scripts/git-security/install-hooks.sh /path/to/repo
+
+set -e
+
+echo "🔍 Scanning for secrets..."
+
+# Get list of staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED_FILES" ]; then
+    echo "✅ No files staged."
+    exit 0
+fi
+
+FOUND=0
+
+# Secret patterns to detect
+declare -A PATTERNS=(
+    ["Anthropic API key"]="sk-ant-api[0-9a-zA-Z_-]+"
+    ["Anthropic Admin key"]="sk-ant-admin[0-9a-zA-Z_-]+"
+    ["OpenAI API key"]="sk-[a-zA-Z0-9]{20,}"
+    ["AWS Access Key"]="AKIA[A-Z0-9]{16}"
+    ["AWS Secret Key"]="['\"][0-9a-zA-Z/+]{40}['\"]"
+    ["Private Key"]="-----BEGIN[A-Z ]*PRIVATE KEY-----"
+    ["GitHub Token"]="gh[pousr]_[A-Za-z0-9_]{36,}"
+    ["Generic Secret"]="['\"]?[sS]ecret['\"]?\s*[:=]\s*['\"][^'\"]{8,}['\"]"
+    ["Generic Password"]="['\"]?[pP]assword['\"]?\s*[:=]\s*['\"][^'\"]{8,}['\"]"
+    ["Generic API Key"]="['\"]?[aA]pi[_-]?[kK]ey['\"]?\s*[:=]\s*['\"][^'\"]{16,}['\"]"
+)
+
+for desc in "${!PATTERNS[@]}"; do
+    pattern="${PATTERNS[$desc]}"
+    for file in $STAGED_FILES; do
+        if [ -f "$file" ]; then
+            MATCHES=$(grep -nE "$pattern" "$file" 2>/dev/null || true)
+            if [ -n "$MATCHES" ]; then
+                echo "⚠️  Potential $desc in $file:"
+                echo "$MATCHES" | head -3
+                FOUND=1
+            fi
+        fi
+    done
+done
+
+# Files that should never be committed
+FORBIDDEN_PATTERNS=(
+    "\.htpasswd$"
+    "\.htaccess$"
+    "\.env$"
+    "\.env\.local$"
+    "\.env\.production$"
+    "id_rsa$"
+    "id_ed25519$"
+    "\.pem$"
+    "credentials\.json$"
+    "secrets\.json$"
+    "service-account.*\.json$"
+)
+
+for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
+    for file in $STAGED_FILES; do
+        if echo "$file" | grep -qE "$pattern"; then
+            echo "❌ BLOCKED: $file matches forbidden pattern ($pattern)"
+            FOUND=1
+        fi
+    done
+done
+
+if [ $FOUND -eq 1 ]; then
+    echo ""
+    echo "❌ Commit blocked due to potential secrets."
+    echo "   Review the files above and remove sensitive data."
+    echo "   If this is a FALSE POSITIVE, you may use:"
+    echo "     git commit --no-verify"
+    echo "   But document why in your commit message!"
+    exit 1
+fi
+
+echo "✅ No secrets detected."
+exit 0
