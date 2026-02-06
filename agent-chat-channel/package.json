@@ -1,0 +1,23 @@
+{
+  "name": "@clawdbot/plugin-agent-chat",
+  "version": "1.0.0",
+  "description": "PostgreSQL agent_chat channel plugin for Clawdbot",
+  "type": "module",
+  "main": "index.js",
+  "keywords": [
+    "clawdbot",
+    "plugin",
+    "channel",
+    "postgresql",
+    "agent-chat"
+  ],
+  "clawdbot": {
+    "extensions": ["index.js"]
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "peerDependencies": {
+    "clawdbot": "*"
+  }
+}
