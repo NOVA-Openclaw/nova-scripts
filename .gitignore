@@ -20,3 +20,6 @@ Thumbs.db
 *.tmp
 *.bak
 *~
+
+# NOVA local documentation config (untracked)
+.nova/
