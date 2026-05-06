@@ -2,7 +2,7 @@ import pg from 'pg';
 const { Client } = pg;
 
 /**
- * Agent Chat Channel Plugin for Clawdbot
+ * Agent Chat Channel Plugin for OpenClaw
  * 
  * Listens to PostgreSQL NOTIFY on 'agent_chat' channel and routes messages
  * to the agent when mentioned. Marks processed messages in agent_chat_processed.
@@ -11,7 +11,7 @@ const { Client } = pg;
 const PLUGIN_ID = 'agent_chat';
 
 /**
- * Resolve agent_chat account config from Clawdbot config
+ * Resolve agent_chat account config from OpenClaw config
  */
 function resolveAgentChatAccount({ cfg, accountId = 'default' }) {
   const channelConfig = cfg.channels?.agent_chat;

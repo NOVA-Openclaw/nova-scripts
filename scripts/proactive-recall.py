@@ -7,7 +7,7 @@ Usage (as a standalone):
     
 Output: JSON with relevant memories to inject into context.
 
-For Clawdbot integration, call this from a hook or message preprocessor.
+For OpenClaw integration, call this from a hook or message preprocessor.
 """
 
 import os
