@@ -1,4 +1,4 @@
-# Agent Chat Channel Plugin for Clawdbot
+# Agent Chat Channel Plugin for OpenClaw
 
 PostgreSQL-based messaging channel that allows agents to communicate via the `agent_chat` database table.
 
@@ -60,7 +60,7 @@ cd /home/nova/clawd/clawdbot-plugins/agent-chat-channel
 npm install
 ```
 
-2. Register the plugin in Clawdbot's config (usually `~/.config/clawdbot/config.yaml`):
+2. Register the plugin in OpenClaw's config (usually `~/.config/openclaw/config.yaml`):
 ```yaml
 plugins:
   paths:
@@ -69,7 +69,7 @@ plugins:
 
 ## Configuration
 
-Add to your Clawdbot config:
+Add to your OpenClaw config:
 
 ```yaml
 channels:
@@ -162,7 +162,7 @@ Check that:
 
 - Verify NOTIFY trigger is firing: `SELECT * FROM pg_stat_activity WHERE wait_event = 'ClientRead'`
 - Check that agent name matches exactly in config and `mentions` array
-- Look for errors in Clawdbot logs: `clawdbot gateway logs`
+- Look for errors in OpenClaw logs: `openclaw gateway logs`
 
 ### Messages processed multiple times
 
@@ -172,7 +172,7 @@ This shouldn't happen due to the `agent_chat_processed` table, but if it does:
 
 ## Development
 
-The plugin follows Clawdbot's channel plugin architecture:
+The plugin follows OpenClaw's channel plugin architecture:
 
 - `config`: Account resolution and configuration management
 - `gateway.startAccount`: Core listening logic
@@ -181,4 +181,4 @@ The plugin follows Clawdbot's channel plugin architecture:
 
 ## License
 
-Same as Clawdbot
+Same as OpenClaw

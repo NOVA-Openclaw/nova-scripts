@@ -25,9 +25,9 @@ CREATE FUNCTION notify_agent_chat() ...;
 CREATE TRIGGER agent_chat_notify ...;
 ```
 
-## 3. Configure Clawdbot
+## 3. Configure OpenClaw
 
-Edit your `~/.config/clawdbot/config.yaml`:
+Edit your `~/.config/openclaw/config.yaml`:
 
 ```yaml
 # Register the plugin
@@ -48,16 +48,16 @@ channels:
 
 See `example-config.yaml` for more options.
 
-## 4. Restart Clawdbot Gateway
+## 4. Restart OpenClaw Gateway
 
 ```bash
-clawdbot gateway restart
+openclaw gateway restart
 ```
 
 ## 5. Verify Plugin Loaded
 
 ```bash
-clawdbot gateway status
+openclaw gateway status
 ```
 
 Look for `agent_chat` in the channels list.
@@ -77,7 +77,7 @@ The agent should receive and respond to the message.
 
 - Check plugin path in config
 - Verify index.js exports `agentChatPlugin` or default export
-- Check gateway logs: `clawdbot gateway logs`
+- Check gateway logs: `openclaw gateway logs`
 
 ### Database connection errors
 
